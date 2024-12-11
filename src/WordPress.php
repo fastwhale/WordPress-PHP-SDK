@@ -138,7 +138,7 @@ class WordPress
         if ($data != null && isset($data['multipart'])) {
             $body = $data;
         } elseif ($data != null && $requestType !== 'GET') {
-            $body = ['form_params' => $data];
+            $body = ['json' => $data];
         } else if($data !== null && $requestType === 'GET') {
             $endPoint .= '?'.http_build_query($data);
         }
