@@ -1,6 +1,6 @@
 {
-  "name": "madeitbelgium/wordpress-php-sdk",
-  "version": "1.5.1",
+  "name": "fastwhale/wordpress-php-sdk",
+  "version": "1.5.2",
   "description": "WordPress Laravel PHP SDK",
   "keywords": [
     "wordpress",
@@ -35,16 +35,16 @@
       "src/"
     ],
     "psr-4": {
-      "MadeITBelgium\\WordPress\\": "src/"
+      "Fastwhale\\WordPress\\": "src/"
     }
   },
   "extra": {
     "laravel": {
       "providers": [
-        "MadeITBelgium\\WordPress\\WordPressServiceProvider"
+        "Fastwhale\\WordPress\\WordPressServiceProvider"
       ],
       "aliases": {
-        "WP": "MadeITBelgium\\WordPress\\WordPressFacade"
+        "WP": "Fastwhale\\WordPress\\WordPressFacade"
       }
     }
   }

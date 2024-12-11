@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use MadeITBelgium\WordPress\WordPress;
+use Fastwhale\WordPress\WordPress;
 use GuzzleHttp\Client;
 
 class WordPressTest extends TestCase
@@ -37,7 +37,7 @@ class WordPressTest extends TestCase
 
         $wordpress->outputAsObject(false);
 
-        $this->assertInstanceOf(\MadeITBelgium\WordPress\Object\User::class, $wordpress->user());
+        $this->assertInstanceOf(\Fastwhale\WordPress\Object\User::class, $wordpress->user());
     }
 
     public function testBuildHeader()

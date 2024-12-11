@@ -1,17 +1,17 @@
 <?php
 
-namespace MadeITBelgium\WordPress;
+namespace Fastwhale\WordPress;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
-use MadeITBelgium\WordPress\Exception\ServerErrorException;
-use MadeITBelgium\WordPress\Exception\UnauthorizedException;
-use MadeITBelgium\WordPress\Exception\ObjectNotFoundException;
-use MadeITBelgium\WordPress\Exception\ValidationException;
-use MadeITBelgium\WordPress\Object\User;
-use MadeITBelgium\WordPress\Object\CustomPost;
-use MadeITBelgium\WordPress\Object\Tag;
+use Fastwhale\WordPress\Exception\ServerErrorException;
+use Fastwhale\WordPress\Exception\UnauthorizedException;
+use Fastwhale\WordPress\Exception\ObjectNotFoundException;
+use Fastwhale\WordPress\Exception\ValidationException;
+use Fastwhale\WordPress\Object\User;
+use Fastwhale\WordPress\Object\CustomPost;
+use Fastwhale\WordPress\Object\Tag;
 
 /**
  * WordPress PHP SDK.

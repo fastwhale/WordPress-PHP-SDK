@@ -1,6 +1,6 @@
 <?php
 
-namespace MadeITBelgium\WordPress;
+namespace Fastwhale\WordPress;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -66,6 +66,6 @@ class WordPressServiceProvider extends ServiceProvider
     {
         $method = 'validate'.studly_case($rule);
         $translation = $this->app['translator']->get('wordpress::validation');
-        $this->app['validator']->extend($rule, 'MadeITBelgium\WordPress\Validation\ValidatorExtensions@'.$method, $translation[$rule]);
+        $this->app['validator']->extend($rule, 'Fastwhale\WordPress\Validation\ValidatorExtensions@'.$method, $translation[$rule]);
     }
 }

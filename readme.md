@@ -11,37 +11,37 @@
 Require this package in your `composer.json` and update composer.
 
 ```php
-composer require madeitbelgium/wordpress-php-sdk
+composer require fastwhale/wordpress-php-sdk
 ```
 
 After updating composer, add the ServiceProvider to the providers array in `config/app.php`
 
 ```php
-MadeITBelgium\WordPress\WordPressServiceProvider::class,
+Fastwhale\WordPress\WordPressServiceProvider::class,
 ```
 
 You can use the facade for shorter code. Add this to your aliases:
 
 ```php
-'WP' => MadeITBelgium\WordPress\WordPressFacade::class,
+'WP' => Fastwhale\WordPress\WordPressFacade::class,
 ```
 
 Add the config files
 ```php
-php artisan vendor:publish --provider="MadeITBelgium\WordPress\WordPressServiceProvider"
+php artisan vendor:publish --provider="Fastwhale\WordPress\WordPressServiceProvider"
 ```
 
 # Documentation
 ## Authentication
 To use authenticated requests you have to sign in to the WordPress website to generate a JWT token. WordPress doesn't support this by default, you have to install a JWT compatible plugin. This package is tested with: https://nl.wordpress.org/plugins/jwt-authentication-for-wp-rest-api/
 ```php
-use MadeITBelgium\WordPress\WordPressFacade as WordPress;
+use Fastwhale\WordPress\WordPressFacade as WordPress;
 $token = WordPress::login($request->get('email'), $request->get('password'));
 // {'token': '...'}
 ```
 Now you can save the `$token->token` to your database.
 ```
-use MadeITBelgium\WordPress\WordPressFacade as WordPress;
+use Fastwhale\WordPress\WordPressFacade as WordPress;
 WordPress::setAccessToken($token);
 ```
 
@@ -58,7 +58,7 @@ $wp = WordPress::setServer('https://www.example.com')
 WordPress Rest API documentation: https://developer.wordpress.org/rest-api/reference/users/
 
 ```
-use MadeITBelgium\WordPress\WordPressFacade as WordPress;
+use Fastwhale\WordPress\WordPressFacade as WordPress;
 $users = WordPress::user()->list();
 $result = WordPress::user()->create($data);
 $user = WordPress::user()->get($id);
@@ -70,7 +70,7 @@ $result = WordPress::user()->delete($id);
 WordPress Rest API documentation: https://developer.wordpress.org/rest-api/reference/posts/
 
 ```
-use MadeITBelgium\WordPress\WordPressFacade as WordPress;
+use Fastwhale\WordPress\WordPressFacade as WordPress;
 $users = WordPress::post()->list();
 $result = WordPress::post()->create($data);
 $user = WordPress::post()->get($id);
@@ -83,7 +83,7 @@ $result = WordPress::post()->delete($id);
 WordPress Rest API documentation: https://developer.wordpress.org/rest-api/reference/posts/
 
 ```
-use MadeITBelgium\WordPress\WordPressFacade as WordPress;
+use Fastwhale\WordPress\WordPressFacade as WordPress;
 $users = WordPress::customPost('custom_post_type')->list();
 $result = WordPress::customPost('custom_post_type')->create($data);
 $user = WordPress::customPost('custom_post_type')->get($id);
@@ -96,7 +96,7 @@ $result = WordPress::customPost('custom_post_type')->delete($id);
 WordPress Rest API documentation: https://developer.wordpress.org/rest-api/reference/tags/
 
 ```
-use MadeITBelgium\WordPress\WordPressFacade as WordPress;
+use Fastwhale\WordPress\WordPressFacade as WordPress;
 $users = WordPress::tag()->list();
 $result = WordPress::tag()->create($data);
 $user = WordPress::tag()->get($id);
@@ -119,7 +119,7 @@ $post = WordPress::post()->create($data);
 ### Uploading media
 ```
 use Illuminate\Support\Facades\Storage;
-use MadeITBelgium\WordPress\WordPressFacade as WordPress;
+use Fastwhale\WordPress\WordPressFacade as WordPress;
 
 $media = WordPress::postCall('/wp-json/wp/v2/media', [
     'multipart' => [

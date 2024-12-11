@@ -1,6 +1,6 @@
 <?php
 
-namespace MadeITBelgium\WordPress;
+namespace Fastwhale\WordPress;
 
 use Illuminate\Support\Facades\Facade;
 

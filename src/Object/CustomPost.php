@@ -1,6 +1,6 @@
 <?php
 
-namespace MadeITBelgium\WordPress\Object;
+namespace Fastwhale\WordPress\Object;
 
 /**
  * WordPress PHP SDK.

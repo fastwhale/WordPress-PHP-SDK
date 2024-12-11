@@ -1,6 +1,6 @@
 <?php
 
-namespace MadeITBelgium\WordPress\Exception;
+namespace Fastwhale\WordPress\Exception;
 
 use Exception;
 
