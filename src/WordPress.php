@@ -133,7 +133,7 @@ class WordPress
     private function call($requestType, $endPoint, $data = null)
     {
         $endPoint = '/'.ltrim($endPoint, '/');
-        
+
         $body = [];
         if ($data != null && isset($data['multipart'])) {
             $body = $data;
@@ -168,6 +168,7 @@ class WordPress
 
         if (in_array($response->getStatusCode(), [200, 201])) {
             $body = (string) $response->getBody();
+	        $body = preg_replace("/^\xEF\xBB\xBF|\xEF\xBB\xBF$/u", '', $body);
             $this->latestHeader = $response->getHeaders();
         } elseif ($response->getStatusCode() == 401) {
             throw new UnauthorizedException();
