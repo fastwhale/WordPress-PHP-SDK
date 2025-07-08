@@ -44,24 +44,10 @@ class WordPress
      * @param $clientSecret;
      * @param $client
      */
-    public function __construct($appUrl, $client = null)
-    {
-        $this->server = $appUrl;
-
-        if ($client == null) {
-            $this->client = new Client([
-                'base_uri' => $this->server,
-                'timeout' => 60.0,
-                'headers' => [
-                    'User-Agent' => 'Made I.T. - WordPress PHP SDK V'.$this->version,
-                    'Accept' => 'application/json',
-                ],
-                'verify' => true,
-            ]);
-        } else {
-            $this->client = $client;
-        }
-    }
+	public function __construct ($appUrl, $client = NULL)
+	{
+		$this->setServer($appUrl, $client);
+	}
 
     public function setClient($client)
     {
@@ -88,20 +74,26 @@ class WordPress
         return $this->latestHeader;
     }
 
-    public function setServer($url)
-    {
-        $this->server = $url;
-        $this->client = new Client([
-            'base_uri' => $this->server,
-            'timeout' => 60.0,
-            'headers' => [
-                'User-Agent' => 'Made I.T. - WordPress PHP SDK V'.$this->version,
-                'Accept' => 'application/json',
-            ],
-            'verify' => true,
-        ]);
-        return $this;
-    }
+	public function setServer ($url, $client = NULL)
+	{
+		$this->server = rtrim($url, '/') . '/';
+
+		if ($client == NULL) {
+			$this->client = new Client([
+				'base_uri' => $this->server,
+				'timeout'  => 60.0,
+				'headers'  => [
+					'User-Agent' => 'Made I.T. - WordPress PHP SDK V' . $this->version,
+					'Accept'     => 'application/json',
+				],
+				'verify'   => true,
+			]);
+		} else {
+			$this->setClient($client);
+		}
+
+		return $this;
+	}
 
     public function getServer()
     {
@@ -120,7 +112,20 @@ class WordPress
         return $this;
     }
 
+	private function cannotRetry ()
+	{
+		if (strpos($this->server, 'index.php') !== false) {
+			return true;
+		}
 
+		$newUri                    = rtrim($this->server, '/') . '/index.php/';
+		$clientOptions             = $this->getClient()->getConfig();
+		$clientOptions['base_uri'] = $newUri;
+		$newClient                 = new Client($clientOptions);
+		$this->setServer($newUri, $newClient);
+
+		return false;
+	}
 
 
     /**
@@ -145,25 +150,34 @@ class WordPress
 
         $endPoint = '/'.ltrim($endPoint, '/');
         $headers = $this->buildHeader($endPoint);
+	    $endPoint = ltrim($endPoint, '/');
 
         try {
             $response = $this->client->request($requestType, $endPoint, $body + $headers);
         } catch (ServerException $e) {
-            throw new ServerErrorException($e->getMessage(), $e->getCode(), $e);
+	        if ($this->cannotRetry()) {
+		        throw new ServerErrorException($e->getMessage(), $e->getCode(), $e);
+	        } else {
+		        return $this->call($requestType, $endPoint, $data);
+	        }
         } catch (ClientException $e) {
-            if ($e->getCode() == 401) {
-                throw new UnauthorizedException($e->getResponse(), $e);
-            } elseif ($e->getCode() == 403) {
-                throw new UnauthorizedException($e->getCode(), $e);
-            } elseif ($e->getCode() == 404) {
-                throw new ObjectNotFoundException($e->getCode(), $e);
-            } elseif ($e->getCode() == 400) {
-                throw new ValidationException($e->getResponse(), $e->getCode(), $e);
-            } elseif ($e->getCode() == 422) {
-                throw new ValidationException($e->getResponse(), $e->getCode(), $e);
-            }
+	        if ($this->cannotRetry()) {
+		        if ($e->getCode() == 401) {
+			        throw new UnauthorizedException($e->getResponse(), $e);
+		        } elseif ($e->getCode() == 403) {
+			        throw new UnauthorizedException($e->getCode(), $e);
+		        } elseif ($e->getCode() == 404) {
+			        throw new ObjectNotFoundException($e->getCode(), $e);
+		        } elseif ($e->getCode() == 400) {
+			        throw new ValidationException($e->getResponse(), $e->getCode(), $e);
+		        } elseif ($e->getCode() == 422) {
+			        throw new ValidationException($e->getResponse(), $e->getCode(), $e);
+		        }
 
-            throw $e;
+		        throw $e;
+	        } else {
+		        return $this->call($requestType, $endPoint, $data);
+	        }
         }
 
         if (in_array($response->getStatusCode(), [200, 201])) {
